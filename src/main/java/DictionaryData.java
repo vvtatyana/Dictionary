@@ -1,20 +1,30 @@
 public enum DictionaryData {
-    LETTER("./src/main/resources/alphabeticDictionary.txt", 4),
-    NUMBER("./src/main/resources/numericalDictionary.txt", 5);
+    LETTER("alphabeticDictionary", 4, "^[a-zA-Z]+$"),
+    NUMBER("numericalDictionary", 5, "\\d+");
 
-    private String path = "";
-    private int size = 0;
+    private final String nameFile;
+    private final int size;
+    private final String filter;
 
-    DictionaryData(String path, int size) {
-        this.path = path;
+    DictionaryData(String nameFile, int size, String filter) {
+        this.nameFile = nameFile;
         this.size = size;
+        this.filter = filter;
     }
 
     String getPath() {
-        return path;
+        return generatePath(nameFile);
     }
 
     int getSize() {
         return size;
+    }
+
+    String getFilter() {
+        return filter;
+    }
+
+    private String generatePath(String nameFile){
+        return "./src/main/resources/" + nameFile + ".txt";
     }
 }
