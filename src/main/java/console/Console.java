@@ -1,5 +1,6 @@
 package console;
 
+import dictionary.DictionaryBuild;
 import exception.WordValidationError;
 
 import java.io.InputStreamReader;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 
 public class Console {
     static Scanner scanner = new Scanner(new InputStreamReader(System.in));
-    static String dictionaryData;
+    static DictionaryBuild dictionaryData = null;
     static String NOT_FOUND = "Нет такой команды";
 
     public void start(){
@@ -22,22 +23,19 @@ public class Console {
     }
 
     private static Boolean choosingDictionary() {
-        System.out.println("\nВыберите словарь:" +
-                "\n1. Латинский словарь" +
-                "\n2. Циферный словарь" +
-                "\n3. Выход\n");
+        System.out.println("""
+
+                Выберите словарь:
+                1. Латинский словарь
+                2. Циферный словарь
+                3. Выход
+                """);
 
         switch (scanner.nextInt()) {
-            case 1:
-                dictionaryData = "alphabeticDictionary";
-                break;
-            case 2:
-                dictionaryData = "numericalDictionary";
-                break;
-            case 3:
-                System.exit(0);
-                break;
-            default: {
+            case 1 -> dictionaryData = DictionaryBuild.ALPHABETIC;
+            case 2 -> dictionaryData = DictionaryBuild.NUMERICAL;
+            case 3 -> System.exit(0);
+            default -> {
                 System.out.println(NOT_FOUND);
                 return true;
             }
@@ -46,13 +44,16 @@ public class Console {
     }
 
     private static Boolean workingWithDictionary(ActionWithDictionary action){
-        System.out.println("\nВыберите:" +
-                "\n1. Чтение списка пар из словаря" +
-                "\n2. Удаление пары из словаря" +
-                "\n3. Поиск записи по ключу" +
-                "\n4. Добавление записи в словарь" +
-                "\n5. Сменить словарь" +
-                "\n6. Выход\n");
+        System.out.println("""
+
+                Выберите:
+                1. Чтение списка пар из словаря
+                2. Удаление пары из словаря
+                3. Поиск записи по ключу
+                4. Добавление записи в словарь
+                5. Сменить словарь
+                6. Выход
+                """);
 
         try {
             switch (scanner.nextInt()) {

@@ -1,17 +1,12 @@
 package console;
 
-import dictionary.AbstractDictionary;
-import dictionary.AlphabeticDictionary;
-import dictionary.NumericalDictionary;
+import dictionary.*;
 
 public class ActionWithDictionary {
+    private final IDictionary dictionary;
 
-    private final AbstractDictionary dictionary;
-
-    public ActionWithDictionary(String dictionaryData) {
-        if(dictionaryData.equals("alphabeticDictionary"))
-            this.dictionary = new AlphabeticDictionary();
-        else this.dictionary = new NumericalDictionary();
+    public ActionWithDictionary(DictionaryBuild dictionaryData) {
+        this.dictionary = dictionaryData.getDictionary();
     }
 
     public String readAllDictionary() {
