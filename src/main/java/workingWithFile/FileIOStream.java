@@ -5,13 +5,16 @@ import pair.Pair;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadingFromFile {
+public class FileIOStream {
     private final String filePath;
 
-    public ReadingFromFile (String filePath){
+    public FileIOStream(String filePath){
         this.filePath = filePath;
     }
 
@@ -33,5 +36,13 @@ public class ReadingFromFile {
             e.printStackTrace();
         }
         return dictionary;
+    }
+
+    public void write(String dictionary) {
+        try (OutputStream os = Files.newOutputStream(Paths.get(filePath))) {
+            os.write(dictionary.getBytes(), 0, dictionary.length());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

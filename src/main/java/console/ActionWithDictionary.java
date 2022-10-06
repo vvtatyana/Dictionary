@@ -5,25 +5,25 @@ import dictionary.*;
 public class ActionWithDictionary {
     private final IDictionary dictionary;
 
-    public ActionWithDictionary(DictionaryBuild dictionaryData) {
-        this.dictionary = dictionaryData.getDictionary();
+    public ActionWithDictionary(DictionaryData dictionaryData) {
+        this.dictionary = new Dictionary(dictionaryData);
     }
 
     public String readAllDictionary() {
         return dictionary.getDictionary().toString();
     }
 
-    public void deletePair(String key) {
-        dictionary.remove(key);
+    public Boolean deletePair(String key) {
+        return dictionary.remove(key);
     }
 
     public String readPair(String key) {
         if (dictionary.contains(key)) {
             return dictionary.getPair(key).toString();
-        } else return null;
+        } else return "";
     }
 
-    public void writePair(String key, String value) {
-        dictionary.add(key, value);
+    public Boolean writePair(String key, String value) {
+        return dictionary.add(key, value);
     }
 }
