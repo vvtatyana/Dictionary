@@ -1,5 +1,0 @@
-four:четыре
-one:один
-two:два
-three:три
-five:пять
