@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,6 +18,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
+import java.util.Objects;
 
 @Configuration
 @ComponentScan("com.example.dictionary")
@@ -24,20 +26,14 @@ import javax.sql.DataSource;
 @PropertySource("classpath:db.properties")
 public class ServletConfig implements WebMvcConfigurer {
 
-    @Value("db.driver")
-    private String driver;
-    @Value("db.url")
-    private String url;
-    @Value("db.username")
-    private String username;
-    @Value("db.password")
-    private String password;
+    private final Environment environment;
 
     private final ApplicationContext applicationContext;
 
     @Autowired
-    public ServletConfig(ApplicationContext applicationContext) {
+    public ServletConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
+        this.environment = environment;
     }
 
     @Bean
@@ -68,10 +64,10 @@ public class ServletConfig implements WebMvcConfigurer {
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/dictionary_db");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("123");
+        dataSource.setDriverClassName(Objects.requireNonNull(environment.getProperty("db.driver")));
+        dataSource.setUrl(environment.getProperty("db.url"));
+        dataSource.setUsername(environment.getProperty("db.username"));
+        dataSource.setPassword(environment.getProperty("db.password"));
 
         return dataSource;
     }
