@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update pair</title>
+</head>
+<body>
+
+<form th:method="PUT" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getIdPair()})}" th:object="${relatedPair}">
+    <label for="word">Enter word: </label>
+    <input type="text" th:field="*{word}" id="word"/>
+    <br/>
+    <label for="translation">Enter translation: </label>
+    <input type="text" th:field="*{translation}" id="translation"/>
+    <br/>
+    <input type="submit" value="Edit"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getIdPair()})}">
+    <input type="submit" value="Delete"/>
+</form>
+
+</body>
+</html>

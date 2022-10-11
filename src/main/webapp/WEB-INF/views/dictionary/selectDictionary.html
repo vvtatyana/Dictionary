@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Menu dictionary</title>
+</head>
+
+<body>
+
+<label>Dictionary file: </label>
+<hr/>
+<div th:each="d : ${dictionary}">
+    <a th:href="@{/dictionary/pair/{name}(name=${d.getName()})}"
+       th:text="${d.getName()}">VALUE</a>
+</div>
+<br/>
+<hr/>
+
+<a th:href="@{/dictionary/addDictionary}">Add dictionary</a>
+<hr/>
+</body>
+
+</html>

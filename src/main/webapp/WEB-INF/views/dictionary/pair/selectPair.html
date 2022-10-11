@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dictionary</title>
+</head>
+
+<body>
+
+<form th:method="GET" th:action="@{/dictionary/pair/searchPair}" >
+    <label for="keyword">Enter word: </label>
+    <input type="text" name="keyword" id="keyword" th:value="${keyword}" />
+    <button type="submit">Search</button>
+</form>
+
+<hr/>
+
+<div th:each="pair : ${relatedPair}">
+    <a th:href="@{/dictionary/pair/{id}/editPair(id=${pair.getId()})}"
+       th:text="${pair.getWord() + ' - ' + pair.getTranslation()}">VALUE</a>
+</div>
+<br/>
+<hr/>
+
+<a th:href="@{/dictionary/pair/addPair}">Add pair</a>
+<hr/>
+<br/>
+<a th:href="@{/dictionary/{id}/editDictionary(id=${dictionary.getId()})}">Update dictionary</a>
+<hr/>
+<br/>
+<a th:href="@{/dictionary}">Back</a>
+<hr/>
+
+</body>
+
+</html>

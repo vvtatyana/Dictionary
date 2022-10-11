@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update dictionary</title>
+</head>
+<body>
+
+<form th:method="PUT" th:action="@{/dictionary/{id}(id=${dictionary.getId()})}" th:object="${dictionary}">
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <label for="regex">Enter regex: </label>
+    <input type="text" th:field="*{regex}" id="regex"/>
+    <br/>
+    <input type="submit" value="Edit"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/dictionary/{id}(id=${dictionary.getId()()})}">
+    <input type="submit" value="Delete"/>
+</form>
+
+</body>
+</html>

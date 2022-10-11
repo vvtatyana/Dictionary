@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add pair</title>
+</head>
+
+<body>
+
+<form th:method="POST" th:action="@{/dictionary/pair}" th:object="${relatedPair}">
+    <label for="word">Enter word: </label>
+    <input type="text" th:field="*{word}" id="word"/>
+    <br/>
+    <label for="translation">Enter translation: </label>
+    <input type="text" th:field="*{translation}" id="translation"/>
+    <br/>
+    <input type="submit" value="Add"/>
+</form>
+
+</body>
+
+</html>
