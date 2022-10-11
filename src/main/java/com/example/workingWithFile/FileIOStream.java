@@ -1,6 +1,7 @@
 package com.example.workingWithFile;
 
 import com.example.pair.Pair;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -15,6 +16,8 @@ import java.util.List;
 @Component
 public class FileIOStream {
     private String filePath;
+    @Value("${application.split}")
+    private String split;
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
@@ -24,7 +27,7 @@ public class FileIOStream {
         List<Pair> dictionary = new ArrayList<>();
         String line;
         while ((line = reader.readLine()) != null) {
-            String[] words = line.split(" - ");
+            String[] words = line.split(split);
             dictionary.add(new Pair(words[0], words[1]));
         }
         return dictionary;

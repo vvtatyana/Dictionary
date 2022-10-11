@@ -2,6 +2,7 @@ package com.example.pair;
 
 import com.example.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -9,10 +10,17 @@ import java.util.List;
 
 @Component
 public class Couples implements ICouples {
-    private final List<Pair> couples = new ArrayList<Pair>();
+    @Value("${application.split}")
+    private String split;
+
+    private final List<Pair> couples = new ArrayList<>();
+
+    private final Validator validator;
 
     @Autowired
-    private Validator validator;
+    public Couples(Validator validator) {
+        this.validator = validator;
+    }
 
     public void createValidator(String regex) {
         validator.setPattern(regex);
@@ -69,7 +77,7 @@ public class Couples implements ICouples {
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (Pair pair : couples) {
-            result.append(pair.toString()).append("\n");
+            result.append(pair.toString(split)).append("\n");
         }
         return result.toString();
     }

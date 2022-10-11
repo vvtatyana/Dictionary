@@ -17,8 +17,7 @@ public class Pair {
         return translation;
     }
 
-    @Override
-    public String toString(){
-        return word + " - " + translation;
+    public String toString(String split){
+        return word + " " + split + " " + translation;
     }
 }
