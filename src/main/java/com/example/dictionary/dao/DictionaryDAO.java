@@ -1,53 +1,61 @@
 package com.example.dictionary.dao;
 
 import com.example.dictionary.models.Dictionary;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Repository
+@Transactional
 public class DictionaryDAO {
-    private final JdbcTemplate jdbcTemplate;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public DictionaryDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public DictionaryDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public List<Dictionary> selectAllDictionary() {
-        return jdbcTemplate.query(
-                "SELECT * FROM dictionary", new BeanPropertyRowMapper<>(Dictionary.class)
-        );
+        Session session = sessionFactory.openSession();
+        return session.createQuery("SELECT d FROM Dictionary d", Dictionary.class).getResultList();
     }
 
     public Dictionary selectDictionary(String name) {
-        return jdbcTemplate.query(
-                "SELECT * FROM dictionary WHERE name = '" + name + "'",
-                new BeanPropertyRowMapper<>(Dictionary.class)
-        ).stream().findFirst().orElse(null);
+        Session session = sessionFactory.openSession();
+        return session.createQuery("SELECT d FROM Dictionary d WHERE name =: value",
+                Dictionary.class).setParameter("value", name).getResultList().stream().findFirst().orElse(null);
     }
 
     public Dictionary selectDictionary(int id) {
-        return jdbcTemplate.query(
-                "SELECT * FROM dictionary WHERE id = " + id,
-                new BeanPropertyRowMapper<>(Dictionary.class)
-        ).stream().findFirst().orElse(null);
+        Session session = sessionFactory.openSession();
+        return session.createQuery("SELECT d FROM Dictionary d WHERE id =: value",
+                Dictionary.class).setParameter("value", id).getResultList().stream().findFirst().orElse(null);
     }
 
     public void insetDictionary(Dictionary dictionary) {
-        jdbcTemplate.update("INSERT INTO dictionary(name, regex) VALUES(?, ?)", dictionary.getName(), dictionary.getRegex());
+        Session session = sessionFactory.openSession();
+        session.save(dictionary);
     }
 
     public void updateDictionary(int id, Dictionary newDictionary) {
-        jdbcTemplate.update(
-                "UPDATE dictionary SET name = '" + newDictionary.getName() + "', regex = '" + newDictionary.getRegex() + "' WHERE id = " + id
-        );
+        Session session = sessionFactory.openSession();
+        Dictionary dictionary = selectDictionary(id);
+        dictionary.setName(newDictionary.getName());
+        dictionary.setRegex(newDictionary.getRegex());
+        session.beginTransaction();
+        session.update(dictionary);
+        session.getTransaction().commit();
     }
 
     public void deleteDictionary(int id) {
-        jdbcTemplate.update("DELETE FROM dictionary WHERE id = " + id);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.remove(session.get(Dictionary.class, id));
+        session.getTransaction().commit();
     }
 }

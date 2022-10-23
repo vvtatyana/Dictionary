@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:method="PUT" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getIdPair()})}" th:object="${relatedPair}">
+<form th:method="PUT" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getId()})}" th:object="${relatedPair}">
     <label for="word">Enter word: </label>
     <input type="text" th:field="*{word}" id="word"/>
     <br/>
@@ -16,7 +16,7 @@
     <input type="submit" value="Edit"/>
 </form>
 
-<form th:method="DELETE" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getIdPair()})}">
+<form th:method="DELETE" th:action="@{/dictionary/pair/{id}(id=${relatedPair.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
 

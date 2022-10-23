@@ -1,9 +1,18 @@
 package com.example.dictionary.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
+@Entity
+@Table(name = "words")
 public class Word {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotEmpty(message = "Word should not be empty")
+    @Column(name = "word")
     private String word;
 
     public Word() {}

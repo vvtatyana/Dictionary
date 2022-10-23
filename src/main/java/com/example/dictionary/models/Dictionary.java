@@ -1,8 +1,22 @@
 package com.example.dictionary.models;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+@Entity
+@Table(name = "dictionary")
 public class Dictionary {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @NotEmpty(message = "Name should not be empty")
+    @Column(name = "name")
     private String name;
+
+    @NotEmpty(message = "Regex should not be empty")
+    @Column(name = "regex")
     private String regex;
 
     public Dictionary(){}

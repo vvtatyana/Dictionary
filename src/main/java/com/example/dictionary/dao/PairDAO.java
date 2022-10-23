@@ -1,59 +1,74 @@
 package com.example.dictionary.dao;
 
 import com.example.dictionary.models.Pair;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-@Component
+@Transactional
+@Repository
 public class PairDAO {
-    private final JdbcTemplate jdbcTemplate;
+
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public PairDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public PairDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public List<Pair> selectAllPairs(int idDictionary) {
-        return selectPairs("id_dictionary = " + idDictionary);
+        Session session = sessionFactory.openSession();
+        return session.createQuery("SELECT p FROM Pair p WHERE idDictionary =: value", Pair.class)
+                .setParameter("value", idDictionary).getResultList();
     }
 
     public List<Pair> selectPairs(int idDictionary, int idWord) {
-        return selectPairs("id_dictionary = " + idDictionary + " AND id_word = '" + idWord + "'");
+        Session session = sessionFactory.openSession();
+        return session.createQuery(
+                "SELECT p FROM Pair p WHERE idDictionary =: valueDic AND idWord =: valueWor", Pair.class)
+                .setParameter("valueDic", idDictionary)
+                .setParameter("valueWor", idWord)
+                .getResultList();
     }
 
     public List<Pair> selectPairs(int idWord) {
-        return selectPairs("id_word = '" + idWord + "'");
+        Session session = sessionFactory.openSession();
+        return session.createQuery(
+                "SELECT p FROM Pair p WHERE idWord =: value", Pair.class)
+                .setParameter("value", idWord).getResultList();
     }
 
     public Pair selectPair(int id) {
-        return selectPairs("id = " + id).stream().findFirst().orElse(null);
-    }
-
-    private List<Pair> selectPairs(String where) {
-        return jdbcTemplate.query(
-                "SELECT * FROM pairs WHERE " + where,
-                new BeanPropertyRowMapper<>(Pair.class)
-        );
+        Session session = sessionFactory.openSession();
+        return session.createQuery(
+                        "SELECT p FROM Pair p WHERE id =: value", Pair.class)
+                .setParameter("value", id).getResultList().stream().findFirst().orElse(null);
     }
 
     public void insetPairs(int id_dictionary, int id_word, int id_translation) {
-        jdbcTemplate.update(
-                "INSERT INTO pairs(id_dictionary, id_word, id_translation) VALUES(?, ?, ?)", id_dictionary, id_word, id_translation
-        );
+        Session session = sessionFactory.openSession();
+        session.save(new Pair(id_dictionary, id_word, id_translation));
     }
 
     public void updatePairs(int id, int id_word, int id_translation) {
-        jdbcTemplate.update(
-                "UPDATE pairs SET id_word = " + id_word + ", id_translation = " + id_translation + " WHERE id = " + id
-        );
+        Session session = sessionFactory.openSession();
+        Pair pair = selectPair(id);
+        pair.setIdWord(id_word);
+        pair.setIdTranslation(id_translation);
+        session.beginTransaction();
+        session.update(pair);
+        session.getTransaction().commit();
     }
 
     public void deletePair(int id) {
-        jdbcTemplate.update("DELETE FROM pairs WHERE id = " + id);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.remove(session.get(Pair.class, id));
+        session.getTransaction().commit();
     }
-
 }

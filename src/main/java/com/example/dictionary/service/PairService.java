@@ -73,12 +73,13 @@ public class PairService {
     }
 
     private int update(int idWord, String word) {
-        List<Pair> pairs = pairDAO.selectPairs(idWord);
-        if (pairs.size() == 1){
-            wordDAO.updateWord(idWord, word);
-        } else {
-            wordDAO.insertWord(word);
-            return wordDAO.selectWord(word).getId();
+        if (!wordDAO.selectWord(idWord).getWord().equals(word)) {
+            if (pairDAO.selectPairs(idWord).size() == 1) {
+                wordDAO.updateWord(idWord, word);
+            } else {
+                wordDAO.insertWord(word);
+                return wordDAO.selectWord(word).getId();
+            }
         }
         return idWord;
     }

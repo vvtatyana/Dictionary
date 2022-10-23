@@ -1,15 +1,34 @@
 package com.example.dictionary.models;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "pairs")
 public class Pair {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    int idDictionary;
-    int idWord;
-    int idTranslation;
+
+    @Column(name = "id_dictionary")
+    private int idDictionary;
+
+    @Column(name = "id_word")
+    private int idWord;
+
+    @Column(name = "id_translation")
+    private int idTranslation;
 
     public Pair() {}
 
     public Pair(int id, int idDictionary, int idWord, int idTranslation) {
         this.id = id;
+        this.idDictionary = idDictionary;
+        this.idWord = idWord;
+        this.idTranslation = idTranslation;
+    }
+
+    public Pair(int idDictionary, int idWord, int idTranslation) {
         this.idDictionary = idDictionary;
         this.idWord = idWord;
         this.idTranslation = idTranslation;

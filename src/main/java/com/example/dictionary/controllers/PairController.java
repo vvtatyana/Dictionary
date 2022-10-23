@@ -24,7 +24,7 @@ public class PairController {
     }
 
     @GetMapping("/{name}")
-    public String selectPairs(Model model,   @PathVariable String name) {
+    public String selectPairs(Model model, @PathVariable String name) {
         dictionary = dictionaryService.select(name);
         model.addAttribute("relatedPair", pairService.selectAll(dictionary.getId()));
         model.addAttribute("dictionary", dictionary);
